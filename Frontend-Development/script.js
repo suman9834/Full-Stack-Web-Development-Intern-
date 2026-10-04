@@ -1,122 +1,175 @@
-const defaultBlogs = [
+const API_URL = 'http://localhost:5000/api/blogs';
+
+// Default Sample Cards
+const sampleBlogs = [
   {
-    id: 1,
-    title: "Getting Started with Web Development",
+    _id: "1",
+    title: "Getting Started with Modern Frontend Development",
     author: "Suman Kumar",
-    content: "Learn the basics of HTML, CSS, and JavaScript to start building modern web applications...",
-    status: "Published"
+    category: "Frontend",
+    content: "Frontend development has evolved rapidly over the past few years. Modern frameworks like React, Vue, and Next.js allow developers to create blazing fast web applications with interactive user interfaces...",
+    createdAt: "2026-10-01T10:00:00.000Z"
   },
   {
-    id: 2,
-    title: "Understanding Frontend Frameworks",
-    author: "Jane Doe",
-    content: "A complete beginner guide to understanding React, Vue, and modern JavaScript libraries...",
-    status: "Published"
+    _id: "2",
+    title: "Building Scalable REST APIs with Node.js & Express",
+    author: "Rahul Sharma",
+    category: "Backend",
+    content: "When designing backend services, scalability and efficiency are key. Node.js provides an asynchronous, event-driven runtime environment ideal for building lightweight and scalable web applications...",
+    createdAt: "2026-10-03T14:30:00.000Z"
+  },
+  {
+    _id: "3",
+    title: "Mastering Glassmorphism & UI Design Trends",
+    author: "Ananya Roy",
+    category: "UI/UX",
+    content: "Glassmorphism creates a sleek, semi-transparent frosted glass aesthetic using backdrop-filter blur effects. Learn how to combine colors, borders, and shadows to craft stunning modern interfaces...",
+    createdAt: "2026-10-04T09:15:00.000Z"
   }
 ];
 
-function getBlogs() {
-  const stored = localStorage.getItem('blogs');
-  if (!stored) {
-    localStorage.setItem('blogs', JSON.stringify(defaultBlogs));
-    return defaultBlogs;
-  }
-  return JSON.parse(stored);
+let allBlogs = [];
+let activeCategory = 'All';
+
+// DOM Elements
+const blogContainer = document.getElementById('blogContainer');
+const searchInput = document.getElementById('searchInput');
+const categoryButtons = document.querySelectorAll('.category-btn');
+const blogCountBadge = document.getElementById('blogCount');
+
+// Initialize Particles Animation
+if (window.tsParticles) {
+  tsParticles.load("tsparticles", {
+    fpsLimit: 60,
+    particles: {
+      number: { value: 60, density: { enable: true, value_area: 800 } },
+      color: { value: "#8b5cf6" },
+      shape: { type: "circle" },
+      opacity: { value: 0.5, random: true },
+      size: { value: 3, random: true },
+      move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } },
+      links: { enable: true, distance: 130, color: "#6366f1", opacity: 0.25, width: 1 }
+    },
+    interactivity: {
+      events: { onHover: { enable: true, mode: "grab" }, onClick: { enable: true, mode: "push" } },
+      modes: { grab: { distance: 140, links: { opacity: 0.7 } }, push: { quantity: 3 } }
+    },
+    detectRetina: true
+  });
 }
 
-function saveBlogs(blogs) {
-  localStorage.setItem('blogs', JSON.stringify(blogs));
+// Toast Alert System
+function showToast(message) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerText = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
-                                // Pages specific functions
-document.addEventListener('DOMContentLoaded', () => {
-                                // 1. Home Page: Load blogs dynamically
-  const blogGrid = document.getElementById('home-blog-grid');
-  if (blogGrid) {
-    const blogs = getBlogs();
-    blogGrid.innerHTML = blogs.map(blog => `
-      <div class="blog-card">
-        <h3>${blog.title}</h3>
-        <p class="author">By ${blog.author}</p>
-        <p>${blog.content}</p>
-      </div>
-    `).join('');
+
+// Redirect to Details Page
+function openBlogDetails(id) {
+  if (id) {
+    window.location.href = `blog-details.html?id=${id}`;
   }
-                                  // 2. Create Blog Form Handling
-  const createBlogForm = document.getElementById('create-blog-form');
-  if (createBlogForm) {
-    createBlogForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const title = document.getElementById('blog-title').value;
-      const content = document.getElementById('blog-content').value;
+}
 
-      const blogs = getBlogs();
-      const newBlog = {
-        id: Date.now(),
-        title: title,
-        author: "Suman Kumar",
-        content: content,
-        status: "Published"
-      };
-
-      blogs.push(newBlog);
-      saveBlogs(blogs);
-
-      alert('Blog Published Successfully!');
-      window.location.href = 'dashboard.html';
-    });
+// Fetch Blogs from API or Fallback to Sample Data
+async function fetchBlogs() {
+  if (!blogContainer) return;
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) throw new Error("API Error");
+    const data = await response.json();
+    
+    
+    if (Array.isArray(data) && data.length > 0) {
+      allBlogs = data;
+    } else {
+      allBlogs = sampleBlogs; // Backend empty or no blogs, fallback to sample data
+    }
+  } catch (error) {
+    console.warn('Backend server unreachable or empty. Showing sample data.');
+    allBlogs = sampleBlogs;
   }
+  filterBlogs();
+}
 
-                // 3. Dashboard Page: Render user blogs & Delete feature
-  const dashboardGrid = document.getElementById('dashboard-blog-grid');
-  if (dashboardGrid) {
-    renderDashboard();
-  }
-
-                    // 4. Login & Register Forms Handling
-  const loginForm = document.getElementById('login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Login Successful!');
-      window.location.href = 'dashboard.html';
-    });
-  }
-
-  const registerForm = document.getElementById('register-form');
-  if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Registration Successful! Please Login.');
-      window.location.href = 'login.html';
-    });
-  }
-});
-
-function renderDashboard() {
-  const dashboardGrid = document.getElementById('dashboard-blog-grid');
-  const blogs = getBlogs();
+// Render Blog Cards UI
+function renderBlogs(blogsList) {
+  if (!blogContainer) return;
   
-  if (blogs.length === 0) {
-    dashboardGrid.innerHTML = '<p>No blogs created yet.</p>';
+  if (blogCountBadge) blogCountBadge.innerText = `${blogsList.length} Blogs`;
+
+  if (!blogsList.length) {
+    blogContainer.innerHTML = `<p style="color: #9ca3af; grid-column: 1/-1; text-align: center;">No blogs match your filter criteria.</p>`;
     return;
   }
 
-  dashboardGrid.innerHTML = blogs.map(blog => `
-    <div class="blog-card" id="blog-${blog.id}">
-      <h3>${blog.title}</h3>
-      <p class="status">Status: ${blog.status}</p>
-      <div class="actions">
-        <button class="btn-action delete" onclick="deleteBlog(${blog.id})">Delete</button>
+  blogContainer.innerHTML = blogsList.map(blog => {
+    const wordCount = blog.content ? blog.content.split(' ').length : 0;
+    const readTime = Math.ceil(wordCount / 100) || 1;
+    const dateFormatted = blog.createdAt 
+      ? new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : 'Oct 5, 2026';
+
+    return `
+      <div class="blog-card glass-card" onclick="openBlogDetails('${blog._id || blog.id}')">
+        <div>
+          <div class="card-header">
+            <span class="category-badge">${blog.category || 'General'}</span>
+            <div class="blog-meta">
+              <span>⏱️ ${readTime} min read</span>
+              <span>📅 ${dateFormatted}</span>
+            </div>
+          </div>
+          <h3 class="blog-title">${blog.title}</h3>
+          <p class="blog-author">⚡ By ${blog.author}</p>
+          <p class="blog-excerpt">${blog.content ? blog.content.substring(0, 110) + '...' : ''}</p>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-function deleteBlog(id) {
-  if (confirm('Are you sure you want to delete this blog?')) {
-    let blogs = getBlogs();
-    blogs = blogs.filter(b => b.id !== id);
-    saveBlogs(blogs);
-    renderDashboard();
-  }
+// Filter Blogs Logic
+function filterBlogs() {
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+  const filtered = allBlogs.filter(blog => {
+    const blogCat = blog.category ? blog.category.toLowerCase().trim() : 'general';
+    const activeCat = activeCategory.toLowerCase().trim();
+
+    const matchesCat = (activeCat === 'all') || (blogCat === activeCat);
+    
+    const matchesQuery = 
+      (blog.title && blog.title.toLowerCase().includes(query)) ||
+      (blog.author && blog.author.toLowerCase().includes(query)) ||
+      (blog.content && blog.content.toLowerCase().includes(query));
+
+    return matchesCat && matchesQuery;
+  });
+
+  renderBlogs(filtered);
 }
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+  fetchBlogs();
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterBlogs);
+  }
+
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      categoryButtons.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      activeCategory = e.target.getAttribute('data-category') || 'All';
+      showToast(`Filter applied: ${activeCategory}`);
+      filterBlogs();
+    });
+  });
+});

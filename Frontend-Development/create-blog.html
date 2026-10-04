@@ -1,35 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog App - Create Blog</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevBlog - Article Details</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">DevBlog</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="create-blog.html">Create Blog</a>
-    </nav>
-  </header>
+    <div id="tsparticles"></div>
 
-  <main class="container">
-    <form class="auth-form blog-form" id="create-blog-form">
-      <h2>Create New Blog</h2>     
-      <div class="input-group">
-        <label>Blog Title</label>
-        <input type="text" id="blog-title" placeholder="Enter blog title" required>
-      </div>
-      <div class="input-group">
-        <label>Blog Content</label>
-        <textarea id="blog-content" rows="8" placeholder="Write your content here..." required></textarea>
-      </div>
-      <button type="submit" class="btn">Publish Blog</button>
-    </form>
-  </main>
-  <script src="script.js"></script>
+    <nav class="navbar">
+        <div class="logo">Dev<span>Blog</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">← Back to Home</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <article class="details-card glass-card">
+            <div id="loadingState" style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                Loading article...
+            </div>
+            <div id="blogDetailContent" style="display: none;">
+                <div class="card-header">
+                    <span id="blogCategory" class="category-badge">Category</span>
+                    <span id="blogDate" class="blog-date">Date</span>
+                </div>
+                <h1 id="blogTitle" class="details-title">Blog Title</h1>
+                <p id="blogAuthor" class="blog-author">⚡ By Author</p>
+                <div id="blogBody" class="details-body">Blog content goes here...</div>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        // Particles Init
+        if (window.tsParticles) {
+            tsParticles.load("tsparticles", {
+                fpsLimit: 60,
+                particles: {
+                    number: { value: 50, density: { enable: true, value_area: 800 } },
+                    color: { value: "#8b5cf6" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } },
+                    links: { enable: true, distance: 130, color: "#6366f1", opacity: 0.25, width: 1 }
+                }
+            });
+        }
+
+        // Fetch Single Blog Logic
+        const urlParams = new URLSearchParams(window.location.search);
+        const blogId = urlParams.get('id');
+
+        async function fetchBlogDetail() {
+            if (!blogId) {
+                document.getElementById('loadingState').innerText = "Invalid blog ID.";
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:5000/api/blogs/${blogId}`);
+                if (!response.ok) throw new Error("Blog not found");
+                const blog = await response.json();
+
+                document.getElementById('blogTitle').innerText = blog.title;
+                document.getElementById('blogAuthor').innerText = `⚡ By ${blog.author}`;
+                document.getElementById('blogCategory').innerText = blog.category || 'General';
+                document.getElementById('blogDate').innerText = blog.createdAt 
+                    ? new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    : 'Oct 5, 2026';
+                document.getElementById('blogBody').innerText = blog.content;
+
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('blogDetailContent').style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loadingState').innerText = "Failed to load blog details.";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchBlogDetail);
+    </script>
 </body>
 </html>

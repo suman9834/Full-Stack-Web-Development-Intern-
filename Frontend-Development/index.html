@@ -1,27 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog App - Home</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevBlog - Developer Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">DevBlog</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="create-blog.html">Create Blog</a>
-    </nav>
-  </header>
+    <div id="tsparticles"></div>
+    <div id="toastContainer" class="toast-container"></div>
 
-  <main class="container">
-    <h1>Latest Blogs</h1>
-    <div class="blog-grid" id="home-blog-grid"></div>
-  </main>
-  <script src="script.js"></script>
+    <nav class="navbar">
+        <div class="logo">Dev<span>Blog</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="create-blog.html" class="btn-create">+ Create Blog</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="hero-section">
+            <h1 class="hero-title">Explore <span class="gradient-text">Latest Insights</span> & Tech Articles</h1>
+            <p class="hero-subtitle">Discover curated blogs built for modern developers.</p>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search blogs by title, author, or category...">
+            </div>
+
+            <div class="category-pills">
+                <button class="category-btn active" data-category="All">All</button>
+                <button class="category-btn" data-category="Frontend">Frontend</button>
+                <button class="category-btn" data-category="Backend">Backend</button>
+                <button class="category-btn" data-category="UI/UX">UI/UX</button>
+                <button class="category-btn" data-category="General">General</button>
+            </div>
+        </header>
+
+        <section class="blog-section">
+            <div class="section-header">
+                <h2 class="section-title">Latest Blogs</h2>
+                <span id="blogCount" class="blog-count-badge">0 Blogs</span>
+            </div>
+            <div id="blogContainer" class="blog-grid"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

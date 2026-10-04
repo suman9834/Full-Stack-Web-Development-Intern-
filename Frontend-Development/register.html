@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog App - Register</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevBlog - Register</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">DevBlog</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
-    </nav>
-  </header>
+    <div id="tsparticles"></div>
 
-  <main class="auth-container">
-    <form class="auth-form">
-      <h2>Register</h2>
-      <div class="input-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Enter full name" required>
-      </div>
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" placeholder="Enter your email" required>
-      </div>
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" placeholder="Create password" required>
-      </div>
-      <button type="submit" class="btn">Register</button>
-      <p>Already have an account? <a href="login.html">Login here</a></p>
-    </form>
-  </main>
-  <script src="script.js"></script>
+    <div class="auth-wrapper">
+        <div class="auth-card glass-card">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Join DevBlog to start sharing your technical journey.</p>
+            </div>
+
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-submit">Register</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (window.tsParticles) {
+            tsParticles.load("tsparticles", {
+                fpsLimit: 60,
+                particles: {
+                    number: { value: 40, density: { enable: true, value_area: 800 } },
+                    color: { value: "#8b5cf6" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } },
+                    links: { enable: true, distance: 130, color: "#6366f1", opacity: 0.25, width: 1 }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
