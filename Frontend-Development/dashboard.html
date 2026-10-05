@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog App - Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevBlog - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">DevBlog</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="create-blog.html">Create Blog</a>
-      <a href="login.html">Logout</a>
-    </nav>
-  </header>
+    <div id="tsparticles"></div>
+    <div id="toastContainer" class="toast-container"></div>
 
-  <main class="container">
-    <h1>Your Dashboard</h1>
-    <a href="create-blog.html" class="btn-small">+ Create New Post</a>    
-    <h2>My Blogs</h2>
-    <div class="blog-grid" id="dashboard-blog-grid"></div>
-  </main>
-  <script src="script.js"></script>
+    <nav class="navbar glass-card">
+        <div class="logo">Dev<span>Blog</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="create-blog.html" class="btn-create">+ Create Blog</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" style="max-width: 900px; margin-top: 40px;">
+        <div class="glass-card" style="padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 style="color: #fff;">Manage Articles</h2>
+                <a href="create-blog.html" class="btn-create" style="padding: 8px 16px; text-decoration: none;">+ Add New Post</a>
+            </div>
+
+            <div id="dashboardBlogList" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Blog Rows Rendered Here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
 </body>
 </html>
