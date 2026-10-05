@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/blogs';
+const API_URL = 'https://full-stack-web-development-intern.onrender.com/api/blogs';
 const token = localStorage.getItem('token');
 
 if (!token) {

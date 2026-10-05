@@ -1,45 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevBlog - Login</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container" style="max-width: 450px; margin-top: 80px;">
-        <div class="glass-card" style="padding: 35px;">
-            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">Login to DevBlog</h2>
-            <form id="loginForm" style="display: flex; flex-direction: column; gap: 15px;">
-                <input type="email" id="loginEmail" placeholder="Email Address" required style="padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #0f172a; color: #fff;">
-                <input type="password" id="loginPassword" placeholder="Password" required style="padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #0f172a; color: #fff;">
-                <button type="submit" class="btn-create" style="padding: 12px; margin-top: 10px;">Login</button>
-            </form>
-            <p style="color: #94a3b8; text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                Don't have an account? <a href="register.html" style="color: #a855f7;">Register</a>
-            </p>
-        </div>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container" style="max-width: 450px; margin-top: 80px">
+      <div class="glass-card" style="padding: 35px">
+        <h2 style="color: #fff; margin-bottom: 20px; text-align: center">
+          Login to DevBlog
+        </h2>
+        <form
+          id="loginForm"
+          style="display: flex; flex-direction: column; gap: 15px">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email Address"
+            required
+            style="
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid var(--card-border);
+              background: #0f172a;
+              color: #fff;
+            " />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+            style="
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid var(--card-border);
+              background: #0f172a;
+              color: #fff;
+            " />
+          <button
+            type="submit"
+            class="btn-create"
+            style="padding: 12px; margin-top: 10px">
+            Login
+          </button>
+        </form>
+        <p
+          style="
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+          ">
+          Don't have an account?
+          <a href="register.html" style="color: #a855f7">Register</a>
+        </p>
+      </div>
     </div>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const res = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: document.getElementById('loginEmail').value,
-                    password: document.getElementById('loginPassword').value
-                })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                window.location.href = 'dashboard.html';
-            } else {
-                alert(data.message || 'Login failed');
-            }
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const res = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: document.getElementById("loginEmail").value,
+              password: document.getElementById("loginPassword").value,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            window.location.href = "dashboard.html";
+          } else {
+            alert(data.message || "Login failed");
+          }
         });
     </script>
-</body>
+  </body>
 </html>

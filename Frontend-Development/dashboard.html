@@ -14,22 +14,32 @@
 
     <nav class="navbar glass-card">
         <div class="logo">Dev<span>Blog</span></div>
-        <ul class="nav-links">
+        <ul class="nav-links" style="display: flex; align-items: center; gap: 15px; list-style: none;">
             <li><a href="index.html">Home</a></li>
             <li><a href="dashboard.html" class="active">Dashboard</a></li>
             <li><a href="create-blog.html" class="btn-create">+ Create Blog</a></li>
+            <!-- Logout Button -->
+            <li>
+                <button id="logoutBtn" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    Logout
+                </button>
+            </li>
         </ul>
     </nav>
 
     <div class="container" style="max-width: 900px; margin-top: 40px;">
         <div class="glass-card" style="padding: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <h2 style="color: #fff;">Manage Articles</h2>
+                <div>
+                    <h2 style="color: #fff; margin: 0;">Manage Articles</h2>
+                    <p id="userInfo" style="color: #a855f7; margin-top: 5px; font-size: 0.9rem;"></p>
+                </div>
                 <a href="create-blog.html" class="btn-create" style="padding: 8px 16px; text-decoration: none;">+ Add New Post</a>
             </div>
 
-            <div id="dashboardBlogList" style="display: flex; flex-direction: column; gap: 15px;">
-                <!-- Blog Rows Rendered Here -->
+            <!-- Matched Container ID for JS rendering -->
+            <div id="blogsContainer" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- User's Blogs Rendered Here -->
             </div>
         </div>
     </div>
