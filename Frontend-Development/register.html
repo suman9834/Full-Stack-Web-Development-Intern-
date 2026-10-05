@@ -5,57 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevBlog - Register</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
 </head>
 <body>
-    <div id="tsparticles"></div>
-
-    <div class="auth-wrapper">
-        <div class="auth-card glass-card">
-            <div class="auth-header">
-                <h2>Create Account</h2>
-                <p>Join DevBlog to start sharing your technical journey.</p>
-            </div>
-
-            <form class="auth-form" id="registerForm">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" placeholder="John Doe" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="name@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-submit">Register</button>
+    <div class="container" style="max-width: 450px; margin-top: 80px;">
+        <div class="glass-card" style="padding: 35px;">
+            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">Register Account</h2>
+            <form id="registerForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" id="regName" placeholder="Full Name" required style="padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #0f172a; color: #fff;">
+                <input type="email" id="regEmail" placeholder="Email Address" required style="padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #0f172a; color: #fff;">
+                <input type="password" id="regPassword" placeholder="Password" required style="padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #0f172a; color: #fff;">
+                <button type="submit" class="btn-create" style="padding: 12px; margin-top: 10px;">Sign Up</button>
             </form>
-
-            <div class="auth-footer">
-                <p>Already have an account? <a href="login.html">Login here</a></p>
-                <a href="index.html" class="back-link">← Back to Home</a>
-            </div>
+            <p style="color: #94a3b8; text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                Already have an account? <a href="login.html" style="color: #a855f7;">Login</a>
+            </p>
         </div>
     </div>
-
     <script>
-        if (window.tsParticles) {
-            tsParticles.load("tsparticles", {
-                fpsLimit: 60,
-                particles: {
-                    number: { value: 40, density: { enable: true, value_area: 800 } },
-                    color: { value: "#8b5cf6" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.5, random: true },
-                    size: { value: 3, random: true },
-                    move: { enable: true, speed: 1.2, direction: "none", outModes: { default: "bounce" } },
-                    links: { enable: true, distance: 130, color: "#6366f1", opacity: 0.25, width: 1 }
-                }
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const res = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('regName').value,
+                    email: document.getElementById('regEmail').value,
+                    password: document.getElementById('regPassword').value
+                })
             });
-        }
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.href = 'dashboard.html';
+            } else {
+                alert(data.message || 'Registration failed');
+            }
+        });
     </script>
 </body>
 </html>
